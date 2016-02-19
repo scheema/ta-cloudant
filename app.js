@@ -68,13 +68,30 @@ function initDBConnection() {
 	var jsonData;
 	db.get("finance", /* @callback */ function(err, data) {
 	// The rest of your code goes here. For example:
-    	console.log('Srinivas: Reading the JSON Document from Cloudant Database ');
-   
+    	console.log('Reading the JSON Document from Cloudant Database ');
+   		if(err){
+   			console.log ('The Databases finance is not found - using default finance.json');
+			return;  		
+   		}
    	 // delete the id, revision properties
-  	  	delete data._id;
+  	 	delete data._id;
     	delete data._rev;
+    	
+    	var fs = require('fs');
+    	
+    	//if (fs.existsSync('public/problems/finance.json')) {
+    	//console.log('Found file finance.json -- deleting it');
+    	//fs.unlinkSync('public/problems/finance.json');
+		//}
     
     	jsonData = JSON.stringify(data);
+		var myobject = JSON.parse(jsonData); // convert the JSON string into a JS object
+ 		myobject.id = myobject._id; // copy the value from the _msgid attribute to the msgid attribute
+ 		myobject.rev = myobject._rev; // copy the value from the _msgid attribute to the msgid attribute 		
+		delete myobject._id; // remove the attribute from the object
+		delete myobject._rev; // remove the attribute from the object	
+		
+ 		jsonData= JSON.stringify(myobject); // store the object's JSON representation back into myjson
     
     	console.log('Found finance: ', jsonData);
     
@@ -82,7 +99,7 @@ function initDBConnection() {
 		// Write the read data finance.json into the public folder
 
 
-		var fs = require('fs');
+
 		console.log('Ready to create the JSON data file in problems folder and file path: ' + __dirname);
 	
 		// Hack: Writing into the same file name as the original ?? 
