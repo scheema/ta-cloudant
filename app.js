@@ -85,14 +85,6 @@ function initDBConnection() {
 		//}
     
     	jsonData = JSON.stringify(data);
-		var myobject = JSON.parse(jsonData); // convert the JSON string into a JS object
- 		myobject.id = myobject._id; // copy the value from the _msgid attribute to the msgid attribute
- 		myobject.rev = myobject._rev; // copy the value from the _msgid attribute to the msgid attribute 		
-		delete myobject._id; // remove the attribute from the object
-		delete myobject._rev; // remove the attribute from the object	
-		
- 		jsonData= JSON.stringify(myobject); // store the object's JSON representation back into myjson
-    
     	console.log('Found finance: ', jsonData);
     
     	// Hack: Srinivas Cheemalapati 09092015
